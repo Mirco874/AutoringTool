@@ -6,7 +6,7 @@ export const Panel = ({ elements,onUpdateElmenet,onRemoveElement }) => {
     <>
       {elements.map((element) => (
         <div key={element.index}>
-          {element.type === "text"? <ChapterEditor content={element} onRemoveElement={onRemoveElement} /> : <Question content={element} onUpdateElmenet={onUpdateElmenet} onRemoveElement={onRemoveElement}/>}
+          {element.type === "text"? <ChapterEditor content={element} onUpdateElmenet={onUpdateElmenet} onRemoveElement={onRemoveElement} /> : <Question content={element} onUpdateElmenet={onUpdateElmenet} onRemoveElement={onRemoveElement}/>}
           <br />
         </div>
       ))}

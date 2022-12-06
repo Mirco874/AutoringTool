@@ -1,12 +1,16 @@
 import { useState } from "react";
 
-export const ShortAnswerQuestion = ({ body, onUpdateElmenet,onRemoveElement }) => {
+export const ShortAnswerQuestion = ({
+  body,
+  onUpdateElmenet,
+  onRemoveElement,
+}) => {
   const [questionBody, setQuestionBody] = useState(body);
-  const { index, question, answer } = questionBody;
+  const { index, question, answer,reference } = questionBody;
 
   const onQuestionChange = ({ target }) => {
     const { name, value } = target;
-
+    console.log(name, value);
     setQuestionBody({
       ...questionBody,
       [name]: value,
@@ -26,7 +30,7 @@ export const ShortAnswerQuestion = ({ body, onUpdateElmenet,onRemoveElement }) =
         ></input>
       </div>
       <div className="card-body mx-auto">
-      <label>Answer: </label>
+        <label>Answer: </label>
         <input
           type="text"
           name="answer"
@@ -34,6 +38,11 @@ export const ShortAnswerQuestion = ({ body, onUpdateElmenet,onRemoveElement }) =
           onChange={(e) => onQuestionChange(e)}
         />
         <br />
+        <br />
+        <div className="d-flex flex-row">
+          <p>reference(optional):</p>{" "}
+          <input type="text" className="w-25 h-25" name={`reference`} value={reference} onChange={(e) => onQuestionChange(e)} />
+        </div>
         <br />
         <button
           className="btn btn-primary"
@@ -43,7 +52,14 @@ export const ShortAnswerQuestion = ({ body, onUpdateElmenet,onRemoveElement }) =
         >
           save
         </button>
-        <button className="btn btn-danger ms-2" onClick={()=>{onRemoveElement(index)}}>remove</button>
+        <button
+          className="btn btn-danger ms-2"
+          onClick={() => {
+            onRemoveElement(index);
+          }}
+        >
+          remove
+        </button>
       </div>
     </div>
   );

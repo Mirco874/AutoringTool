@@ -1,8 +1,8 @@
 import { useElementsList } from "../useElementsList/useElementsList";
 
 export const useElements = (initialElementsList = []) => {
-  const { elements, onAddElement, onUpdateElmenet, onRemoveElement }=useElementsList(initialElementsList);
-
+  const {elements,onAddElement,onUpdateElmenet,onRemoveElement,setElements}=useElementsList(initialElementsList);
+  
   const onAddChapter = () => {
     const emptyChapter = {
       type: "text",
@@ -18,6 +18,7 @@ export const useElements = (initialElementsList = []) => {
       question: "a",
       question: "",
       options: [],
+      reference:"",
     };
     onAddElement(emptyMulChoiQuest);
     
@@ -27,8 +28,9 @@ export const useElements = (initialElementsList = []) => {
     const emptyTFQuest = {
       type: "question",
       question_type: "tf",
-      question: "a",
+      question: "",
       answer: false,
+      reference:"",
     };
     onAddElement(emptyTFQuest);
   };
@@ -37,8 +39,9 @@ export const useElements = (initialElementsList = []) => {
     const emptyShortTestQuest = {
       type: "question",
       question_type: "word",
-      question: "a",
+      question: "",
       answer: "",
+      reference:"",
     };
     onAddElement(emptyShortTestQuest);
   };
@@ -50,6 +53,7 @@ export const useElements = (initialElementsList = []) => {
     onAddShortTextQuest,
     onAddTFQuest,
     onUpdateElmenet,
-    onRemoveElement
+    onRemoveElement,
+    setElements
   };
 };

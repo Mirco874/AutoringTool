@@ -1,5 +1,10 @@
-import { saveAs } from 'file-saver'
+import { get, getBlobFile, post } from "./fetch";
 
+const createText=(textId,htmlContent)=>{
+    return `<div id=text-${textId}>
+                ${htmlContent}
+            </div>`;
+}
 
 const createMCOption=(questionId,value,optionIndex)=>{
     return `<div class="form-check">
@@ -74,14 +79,21 @@ const createSAQuestion=(index,question)=>{
             </div>`;
 }
 
-const generateForm=(content)=>{
+const generateInteractiveContent=(content)=>{
     let htmlForm=``;
-    content.forEach((card)=>{
-        const {index,type,question_type,question}=card;
-        
+    content.forEach((item)=>{
+
+    const {type}=item;  
+
+        if(type==="text"){
+            const {index,htmlContent}=item;
+            htmlForm+=createText(index,htmlContent);
+            }
+
         if(type==="question"){
+            const {index,question_type,question}=item;
             if(question_type==="multiple"){
-                htmlForm+=createMCQuestion(index,question,card.options);
+                htmlForm+=createMCQuestion(index,question,item.options);
             }
             if(question_type==="tf"){
                 htmlForm+=createTFQuestion(index,question);
@@ -141,7 +153,7 @@ const generateScript=(content)=>{
 
 
 const generateHtml=(content)=>{
-    let htmlForm=generateForm(content);
+    let htmlInteractiveContent=generateInteractiveContent(content);
     let script=generateScript(content);
 
     return `<!DOCTYPE html>
@@ -157,7 +169,7 @@ const generateHtml=(content)=>{
                     <body>
                         <main class="mx-auto">
                             <h1>Cuestionario 2022 </h1>
-                            ${htmlForm}
+                            ${htmlInteractiveContent}
                             <button class="btn btn-outline-primary d-block mb-5" id="evaluation-button" onclick='setPointsPerQuestion()'>Enviar</button>
                         </main>
                         <script src="scormfunctions.js" type="text/javascript"></script>
@@ -201,26 +213,38 @@ const generateManifest=()=>{
 </manifest>`;
 }
 
+const createHtmlFile=(htmlContent)=>{
+    const url="http://localhost:3001/editor";
+    const jsonBody={
+        standar:"scorm",
+        type:"main",
+        content:htmlContent
+    }
+    post(url,jsonBody)
+}
 
-// const writeFile=(content,location)=>{
-//     fs.writeFile(location,content, err => {
-//         if (err) {
-//           console.error(err);
-//         }
-//       });
-// }
+const createManifestFile=(manifestContent)=>{
+    const url="http://localhost:3001/editor";
+    const jsonBody={
+        standar:"scorm",
+        type:"manifest",
+        content:manifestContent
+    }
+    post(url,jsonBody)
+}
 
-// const exportSCORMZip=()=>{
-//     zipper.sync.zip("./exports/scorm_course").compress().save("scorm_course.zip");
-// }
+const downloadScormZip=()=>{
+    const url="http://localhost:3001/generate-scorm";
+    const currentDate = (new Date()).toLocaleString();
+    const fileName=`scorm_${currentDate}`;
+    getBlobFile(url,fileName)
+}
 
 
 export const generateSCORM=(content)=>{
-    const htmlDirectory='./exports/scorm_course/shared/question1.html';
-    const manifestDirectory='./exports/scorm_course/imsmanifest.xml'
-    // const htmlContent=generateHtml(content);
-    // const manfifestContent=generateManifest();
-    // writeFile(htmlContent,htmlDirectory);
-    // writeFile(manfifestContent,manifestDirectory);
-    //exportSCORMZip();
+    const htmlContent=generateHtml(content);
+    const manifestContent=generateManifest();
+    createHtmlFile(htmlContent);
+    createManifestFile(manifestContent)
+    downloadScormZip();
 } 

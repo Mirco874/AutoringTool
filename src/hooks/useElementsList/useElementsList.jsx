@@ -31,5 +31,5 @@ export const useElementsList = (initialList=[]) => {
         setElements(list.sort((a, b) =>  (a.index - b.index)));
     }
 
-    return { elements,onAddElement,onUpdateElmenet,onRemoveElement };
+    return { elements,onAddElement,onUpdateElmenet,onRemoveElement,setElements };
 }

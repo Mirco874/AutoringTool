@@ -1,9 +1,10 @@
 import { exportJsonFS } from "../../../AuthoringTool/helpers/exportJsonFS/exportJsonFS";
 import "./Dropdown.css";
-export const Dropdown = ({title,elements}) => {
+export const Dropdown = ({title,elements,setElements}) => {
 
 
   const importJsonFS= (e)=>{
+    
     let content="";
     const file=e.target.files[0];
     const fileReader=new FileReader();
@@ -14,15 +15,14 @@ export const Dropdown = ({title,elements}) => {
 
     fileReader.onload=()=>{
         content=JSON.parse(fileReader.result);
-        console.log(content);}
+
+        setElements(content)
+        console.log("elements");
+        console.log(content);
+      }
 
     fileReader.onerror=()=>{console.error("something´s wrong");}
-    
-    return content;
 }
-
-
-
 
   return (
     <div className="dropdown">

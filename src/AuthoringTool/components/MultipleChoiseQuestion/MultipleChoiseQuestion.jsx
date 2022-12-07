@@ -5,7 +5,7 @@ import { MultipleChoiseInput } from "../MultipleChoiseInput/MultipleChoiseInput"
 export const MultipleChoiseQuestion = ({ body,onUpdateElmenet,onRemoveElement }) => {
 
   const [questionBody, setQuestionBody] = useState(body);
-  const {index, question, options } = questionBody;
+  const {index, question, options,reference,points,failedMessage } = questionBody;
   const {counter,increment}= useCounter(1);
 
   const onAddOption = () => {
@@ -25,7 +25,7 @@ export const MultipleChoiseQuestion = ({ body,onUpdateElmenet,onRemoveElement })
 
   const onQuestionChange = ({ target }) => {
     const { name, value } = target;
-
+console.log(name,value)
     setQuestionBody({
       ...questionBody,
       [name]: value,
@@ -55,16 +55,15 @@ export const MultipleChoiseQuestion = ({ body,onUpdateElmenet,onRemoveElement })
   };
 
   const onCheckChange = (event, id) => {
-    let optionList = options.filter(({ index }) => id != index); ///preguntar
-
+    //encontrar
     const targetOption = options.find(({ index }) => {
       return id == index;
     });
 
-    optionList.forEach((option) => {
-      option.state = false;
-    });
-    targetOption.state = true;
+    //eliminar
+     let optionList = options.filter(({ index }) => id != index); 
+
+    targetOption.state = !targetOption.state;
 
     optionList.push(targetOption);
 
@@ -112,8 +111,35 @@ export const MultipleChoiseQuestion = ({ body,onUpdateElmenet,onRemoveElement })
           </tbody>
         </table>
         <button className="btn btn-light" onClick={() => onAddOption()}>
-          add question
+          add option
         </button>
+        <br />
+        <br />
+
+        <div className="input-group input-group-sm mb-3">
+          <div className="input-group-prepend">
+            <span className="input-group-text" id="inputGroup-sizing-sm">reference(optional):</span>
+          </div>
+          <input type="text" className="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" value={reference} name={`reference`} onChange={(e) => onQuestionChange(e)}/>
+        </div>
+
+        
+        <div className="input-group input-group-sm mb-3">
+          <div className="input-group-prepend">
+            <span className="input-group-text" id="inputGroup-sizing-sm">points:</span>
+          </div>
+          <input type="number" className="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" value={points}  name="points" onChange={(e) => onQuestionChange(e)}/>
+        </div>
+
+        
+        <div className="input-group input-group-sm mb-3">
+          <div className="input-group-prepend">
+            <span className="input-group-text" id="inputGroup-sizing-sm">failed message:</span>
+          </div>
+          <input type="text" className="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" value={failedMessage} name="failedMessage" onChange={(e) => onQuestionChange(e)}/>
+        </div>      
+
+        <br />
         <button className="btn btn-primary" onClick={()=>{onUpdateElmenet(questionBody)}}>save</button>
         <button className="btn btn-danger ms-2" onClick={()=>{onRemoveElement(index)}}>remove</button>
       </div>

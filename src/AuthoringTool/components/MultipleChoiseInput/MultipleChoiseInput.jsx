@@ -12,7 +12,7 @@ export const MultipleChoiseInput = ({index,content,state,onInputChange,onCheckCh
       </td>
       <td>
         <input
-          type="radio"
+          type="checkbox"
           name={`${index}-MCQuestion`}
           checked={state}
           onChange={(e)=>onCheckChange(e,index)}

@@ -6,13 +6,6 @@ import "./EditorPage.css";
 
 export const EditorPage = () => {
   const initialElementsList = [];
-  const dropdownButtons = [
-    {
-      buttonText: "file...",
-      options: [{ text: "export JSON to FS", funct: exportJsonFS },
-      { text: "import JSON from FS", funct: ()=>{} }],
-    },
-  ];
 
   const {
     elements,
@@ -22,13 +15,14 @@ export const EditorPage = () => {
     onAddTFQuest,
     onUpdateElmenet,
     onRemoveElement,
+    setElements
   } = useElements(initialElementsList);
 
   return (
     <>
-      <Navbar title={"Authoring tool."} elements={elements} />
+      <Navbar title={"Authoring tool."} elements={elements} setElements={setElements} />
       <main className="main">
-        <aside className="side-bar mx-2 ">
+        <aside className="side-bar mx-2 postition-fixed ">
           <PanelEditor onAddChapter={onAddChapter} />
         </aside>
         <section className="panel-section">

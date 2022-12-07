@@ -2,6 +2,7 @@ import "./PanelEditor.css";
 export const PanelEditor = ({ onAddChapter }) => {
   return (
     <>
+
       <h3 className="aside-title">Select element:</h3>
       <hr />
 
@@ -25,6 +26,8 @@ export const PanelEditor = ({ onAddChapter }) => {
           add question
         </button>
       </div>
+
     </>
+
   );
 };

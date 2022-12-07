@@ -22,7 +22,7 @@ export const EditorPage = () => {
     <>
       <Navbar title={"Authoring tool."} elements={elements} setElements={setElements} />
       <main className="main">
-        <aside className="side-bar mx-2 ">
+        <aside className="side-bar mx-2 postition-fixed ">
           <PanelEditor onAddChapter={onAddChapter} />
         </aside>
         <section className="panel-section">

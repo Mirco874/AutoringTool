@@ -19,6 +19,8 @@ export const useElements = (initialElementsList = []) => {
       question: "",
       options: [],
       reference:"",
+      points:"",
+      failedMessage:""
     };
     onAddElement(emptyMulChoiQuest);
     
@@ -31,6 +33,8 @@ export const useElements = (initialElementsList = []) => {
       question: "",
       answer: false,
       reference:"",
+      points:"",
+      failedMessage:""
     };
     onAddElement(emptyTFQuest);
   };
@@ -42,6 +46,8 @@ export const useElements = (initialElementsList = []) => {
       question: "",
       answer: "",
       reference:"",
+      points:"",
+      failedMessage:""
     };
     onAddElement(emptyShortTestQuest);
   };

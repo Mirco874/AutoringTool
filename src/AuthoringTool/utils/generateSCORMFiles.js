@@ -6,6 +6,18 @@ const createText=(textId,htmlContent)=>{
             </div>`;
 }
 
+const createBadResponseCard=(id,message)=>{
+    return `
+    <div class="card border-danger" id="bad-response-question-${id}" style="max-width: 100vh;" hidden>
+        <div class="card-body text-danger">
+        <h6 class="card-title">Respueta incorrecta</h6>
+        <p class="card-text">${message}</p>
+        </div>
+    </div>
+    `
+}
+
+
 const createMCOption=(questionId,value,optionIndex)=>{
     return `<div class="form-check">
                 <input  class="check-input form-check-input question-${questionId} multiple-choise-input" 
@@ -13,7 +25,8 @@ const createMCOption=(questionId,value,optionIndex)=>{
                         value="${value}" 
                         id="flexCheckChecked${optionIndex}" >
                 <label class="form-check-label" for="flexCheckChecked${optionIndex}}">${value}</label>
-            </div>`;
+            </div>
+            `;
 }
 
 
@@ -34,7 +47,10 @@ const createMCQuestion=(index,question,optionsList)=>{
                     </div>
 
                 </div>
-            </div>`;
+            </div>
+            
+            
+            `;
 }
 
 
@@ -82,7 +98,7 @@ const createSAQuestion=(index,question)=>{
 const generateInteractiveContent=(content)=>{
     let htmlForm=``;
     content.forEach((item)=>{
-
+        console.log(item)
     const {type}=item;  
 
         if(type==="text"){
@@ -91,16 +107,20 @@ const generateInteractiveContent=(content)=>{
             }
 
         if(type==="question"){
-            const {index,question_type,question}=item;
+            const {index,question_type,question,failedMessage}=item;
             if(question_type==="multiple"){
                 htmlForm+=createMCQuestion(index,question,item.options);
+                
+
             }
             if(question_type==="tf"){
                 htmlForm+=createTFQuestion(index,question);
+
             }
             if(question_type==="word"){
                 htmlForm+=createSAQuestion(index,question);
             }
+            htmlForm+=createBadResponseCard(index,failedMessage);
         }
     })
     return htmlForm;
@@ -121,25 +141,37 @@ const getCorrectAnswer=(answerList)=>{
       return response;
 }
 
-const generateScript=(content)=>{
-    let pointsPerQuestion=100/content.length;
-    let questionsResponseExpected=``;
 
+const generateScript=(content)=>{
+    let questionsResponseExpected=``;
+    let totalQuestions=0;
+    const pointsPerQuestion=100/content.length;
     content.forEach((item)=>{
-        const {index,question,question_type,answer}=item;
-        if(question_type==="multiple"){
-            questionsResponseExpected+=`{ 
-                                        number:${index},
-                                        correctAnswer:[${getCorrectAnswer(item.options)}],
-                                        points:${pointsPerQuestion},},`;
-        }
-        else{
-            questionsResponseExpected+=`{ 
-                                        number:${index},
-                                        correctAnswer:["${answer}"],
-                                        points:${pointsPerQuestion},},`;
+        const {type}=item;
+        if(type==="question")
+        {
+            totalQuestions++;
+            const {index,question_type,answer,points,failedMessage}=item;
+            if(question_type==="multiple"){
+                questionsResponseExpected+=`{ 
+                                            number:${index},
+                                            correctAnswer:[${getCorrectAnswer(item.options)}],
+                                            points:${parseInt(points)},
+                                            failedMessage:"${failedMessage.toString()}"
+                                            },`;
             }
+            else{
+                questionsResponseExpected+=`{ 
+                                            number:${index},
+                                            correctAnswer:["${answer}"],
+                                            points:${parseInt(points)},
+                                            failedMessage:"${failedMessage.toString()}"
+                                            },`;
+                }
+        }
+
     })
+    
 
     return `
     let totalScore=0;
@@ -150,6 +182,10 @@ const generateScript=(content)=>{
     const minimalNoteToAprove=51;
     const questionsResponseExpected=[${questionsResponseExpected}];`;
 }
+
+
+
+
 
 
 const generateHtml=(content)=>{
@@ -205,8 +241,8 @@ const generateManifest=()=>{
 </organizations>
 
 <resources>
-    <resource identifier="resource_1" type="webcontent" adlcp:scormType="sco" href="shared/question1.html">
-        <file href="shared/question1.html"/>
+    <resource identifier="resource_1" type="webcontent" adlcp:scormType="sco" href="shared/main.html">
+        <file href="shared/main.html"/>
     </resource>
 </resources>
 
@@ -244,6 +280,7 @@ const downloadScormZip=()=>{
 export const generateSCORM=(content)=>{
     const htmlContent=generateHtml(content);
     const manifestContent=generateManifest();
+    console.log(htmlContent);
     createHtmlFile(htmlContent);
     createManifestFile(manifestContent)
     downloadScormZip();

@@ -6,7 +6,7 @@ export const ShortAnswerQuestion = ({
   onRemoveElement,
 }) => {
   const [questionBody, setQuestionBody] = useState(body);
-  const { index, question, answer,reference } = questionBody;
+  const { index, question, answer,reference,points,failedMessage } = questionBody;
 
   const onQuestionChange = ({ target }) => {
     const { name, value } = target;
@@ -36,13 +36,36 @@ export const ShortAnswerQuestion = ({
           name="answer"
           value={answer}
           onChange={(e) => onQuestionChange(e)}
-        />
+        /> 
         <br />
         <br />
-        <div className="d-flex flex-row">
-          <p>reference(optional):</p>{" "}
-          <input type="text" className="w-25 h-25" name={`reference`} value={reference} onChange={(e) => onQuestionChange(e)} />
+
+        <div className="input-group input-group-sm mb-3">
+          <div className="input-group-prepend">
+            <span className="input-group-text" id="inputGroup-sizing-sm">reference(optional):</span>
+          </div>
+          <input type="text" className="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" value={reference} name={`reference`} onChange={(e) => onQuestionChange(e)}/>
         </div>
+
+        
+        <div className="input-group input-group-sm mb-3">
+          <div className="input-group-prepend">
+            <span className="input-group-text" id="inputGroup-sizing-sm">points:</span>
+          </div>
+          <input type="number" className="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" value={points}  name="points" onChange={(e) => onQuestionChange(e)}/>
+        </div>
+
+        
+        <div className="input-group input-group-sm mb-3">
+          <div className="input-group-prepend">
+            <span className="input-group-text" id="inputGroup-sizing-sm">failed message:</span>
+          </div>
+          <input type="text" className="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" value={failedMessage} name="failedMessage" onChange={(e) => onQuestionChange(e)}/>
+        </div>  
+
+
+
+
         <br />
         <button
           className="btn btn-primary"

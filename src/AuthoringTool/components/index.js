@@ -8,3 +8,4 @@ export * from "./MultipleChoiseInput/MultipleChoiseInput";
 export * from "./Question/Question";
 export * from "./TFQuestion/TFQuestion";
 export * from "./ShortAnswerQuestion/ShortAnswerQuestion";
+export * from "./MetadataEditor/MetadataEditor";

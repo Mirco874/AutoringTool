@@ -7,5 +7,4 @@ export const Question = ({content,onUpdateElmenet,onRemoveElement}) => {
         case "word": return <ShortAnswerQuestion body={content} onUpdateElmenet={onUpdateElmenet} onRemoveElement={onRemoveElement}/>;
         default: return <div>question type not found</div>
       }
-
 }

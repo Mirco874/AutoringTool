@@ -11,5 +11,5 @@ export const useForm = (structure={}) => {
         );       
     }
 
-  return{form,onFormUpdate}
+  return{form,onFormUpdate,setForm}
 }

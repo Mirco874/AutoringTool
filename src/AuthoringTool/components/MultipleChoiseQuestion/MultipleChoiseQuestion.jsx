@@ -25,11 +25,8 @@ export const MultipleChoiseQuestion = ({ body,onUpdateElmenet,onRemoveElement })
 
   const onQuestionChange = ({ target }) => {
     const { name, value } = target;
-console.log(name,value)
-    setQuestionBody({
-      ...questionBody,
-      [name]: value,
-    });
+    setQuestionBody({...questionBody,[name]: value});
+  
   };
 
   const onInputChange = (event, inputIndex) => {

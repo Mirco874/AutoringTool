@@ -1,11 +1,14 @@
-import { useElements } from "../../../hooks";
+import { useElements, useForm } from "../../../hooks";
 import { Navbar } from "../../../UI/components";
 import { Panel, PanelEditor, QuizModal } from "../../components";
+import MetadataEditor from "../../components/MetadataEditor/MetadataEditor";
 import { exportJsonFS } from "../../helpers";
 import "./EditorPage.css";
 
 export const EditorPage = () => {
   const initialElementsList = [];
+  const initialQuizDataForm={ autor:"",titulo:"",organizacion:"", puntaje_total:""}
+  const {form,onFormUpdate,setForm}=useForm(initialQuizDataForm);
 
   const {
     elements,
@@ -18,9 +21,10 @@ export const EditorPage = () => {
     setElements
   } = useElements(initialElementsList);
 
+
   return (
     <>
-      <Navbar title={"Authoring tool."} elements={elements} setElements={setElements} />
+      <Navbar title={"Authoring tool."} elements={elements} setElements={setElements} metadata={form} setMetadata={setForm} />
       <main className="main">
         <aside className="side-bar mx-2 postition-fixed ">
           <PanelEditor onAddChapter={onAddChapter} />
@@ -31,6 +35,8 @@ export const EditorPage = () => {
             onAddTFQuest={onAddTFQuest}
             onAddShortTextQuest={onAddShortTextQuest}
           />
+        <MetadataEditor form={form} onFormUpdate={onFormUpdate}   />
+        <hr />
           <Panel
             elements={elements}
             onUpdateElmenet={onUpdateElmenet}

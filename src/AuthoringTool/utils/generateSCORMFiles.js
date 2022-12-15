@@ -142,10 +142,12 @@ const getCorrectAnswer=(answerList)=>{
 }
 
 
-const generateScript=(content)=>{
+const generateScript=(quizData,content)=>{
+    const {puntaje_total}=quizData;
     let questionsResponseExpected=``;
     let totalQuestions=0;
     const pointsPerQuestion=100/content.length;
+    const minimalNote=(parseInt(puntaje_total)/2)+1;
     content.forEach((item)=>{
         const {type}=item;
         if(type==="question")
@@ -178,8 +180,8 @@ const generateScript=(content)=>{
     let totalAttemps=0;
     let incorrectResponses=0;
     const minScore=0;
-    const maxScore=100;
-    const minimalNoteToAprove=51;
+    const maxScore=${puntaje_total};
+    const minimalNoteToAprove=${minimalNote};
     const questionsResponseExpected=[${questionsResponseExpected}];`;
 }
 
@@ -188,9 +190,10 @@ const generateScript=(content)=>{
 
 
 
-const generateHtml=(content)=>{
+const generateHtml=(quizData,content)=>{
+    const {autor,titulo, puntaje_total}=quizData;
     let htmlInteractiveContent=generateInteractiveContent(content);
-    let script=generateScript(content);
+    let script=generateScript(quizData,content);
 
     return `<!DOCTYPE html>
                 <html lang="en">
@@ -200,11 +203,17 @@ const generateHtml=(content)=>{
                         <meta name="viewport" content="width=device-width, initial-scale=1.0">
                         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
                         <link rel="stylesheet" href="../styles/form-styles.css">
-                        <title>Ejemplo del cuestionario final</title>
+                        <title>${titulo}</title>
                     </head>
                     <body>
                         <main class="mx-auto">
-                            <h1>Cuestionario 2022 </h1>
+                            <h1>${titulo}</h1>
+                                <br/>
+                                    <b>Author:</b> ${autor}
+                                <br/>
+                                <br/>
+                                    <b>Max points:</b> ${puntaje_total}
+                                <br/>
                             ${htmlInteractiveContent}
                             <button class="btn btn-outline-primary d-block mb-5" id="evaluation-button" onclick='setPointsPerQuestion()'>Enviar</button>
                         </main>
@@ -217,7 +226,9 @@ const generateHtml=(content)=>{
             </html>`;
 }
 
-const generateManifest=()=>{
+const generateManifest=(quizData)=>{
+    const {titulo,organizacion}=quizData;
+
     return `<manifest 
     identifier="com.scorm.eva.2_2022.group_5" 
     version="1">
@@ -227,9 +238,9 @@ const generateManifest=()=>{
 </metadata>
 <organizations>
     <organization identifier="eva_2022">
-        <title>EVA 2022</title>
+        <title>EVA</title>
         <item identifier="item_1" identifierref="resource_1">
-            <title>Cuestionario</title>
+            <title>EVA</title>
             <imsss:sequencing>
             <imsss:deliveryControls completionSetByContent="true" objectiveSetByContent="true"/>
             </imsss:sequencing>
@@ -277,9 +288,9 @@ const downloadScormZip=()=>{
 }
 
 
-export const generateSCORM=(content)=>{
-    const htmlContent=generateHtml(content);
-    const manifestContent=generateManifest();
+export const generateSCORM=( quizData,elements)=>{
+    const htmlContent=generateHtml(quizData,elements);
+    const manifestContent=generateManifest(quizData);
     console.log(htmlContent);
     createHtmlFile(htmlContent);
     createManifestFile(manifestContent)

@@ -7,7 +7,9 @@ import "./EditorPage.css";
 
 export const EditorPage = () => {
   const initialElementsList = [];
-  const initialQuizDataForm={ autor:"",titulo:"",organizacion:"", puntaje_total:""}
+  const initialQuizDataForm={ autor:"",titulo:"",organizacion:"", puntaje_total:"", xapi_domain:"",lrs:"",lrs_username:"",lrs_pass:"" }
+
+
   const {form,onFormUpdate,setForm}=useForm(initialQuizDataForm);
 
   const {
@@ -24,7 +26,7 @@ export const EditorPage = () => {
 
   return (
     <>
-      <Navbar title={"Authoring tool."} elements={elements} setElements={setElements} metadata={form} setMetadata={setForm} />
+      <Navbar title={"Authoring tool."} elements={elements} setElements={setElements} metadata={form} setMetadata={setForm} onFormUpdate={onFormUpdate}/>
       <main className="main">
         <aside className="side-bar mx-2 postition-fixed ">
           <PanelEditor onAddChapter={onAddChapter} />

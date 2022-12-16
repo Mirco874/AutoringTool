@@ -250,9 +250,8 @@ const generateScript=(quizData,content)=>{
     const questionsResponseExpected=[${questionsResponseExpected}];`;
 }
 
-
 const generateHtml=(quizData,content)=>{
-    const {autor,titulo, puntaje_total}=quizData;
+    const {autor,titulo, puntaje_total,xapi_domain,lrs,lrs_username,lrs_pass}=quizData;
     let htmlInteractiveContent=generateInteractiveContent(content); // preguntas interactivas
     let script=generateScript(quizData,content); // generar valores iniciales
     let xapiScript=generateXAPIScript(content);  // generar los statements iniciales
@@ -269,13 +268,16 @@ const generateHtml=(quizData,content)=>{
         </head>
         <body>
             <main class="mx-auto">
-                <h1 class="mx-auto">${titulo}</h1>
-                <br/>
-                <b class="mx-auto">Author:</b> ${autor}
-                <br/>
-                <br/>
-                <b class="mx-auto">Max points:</b> ${puntaje_total}
-                <br/>
+            <div style="margin-left:50vh;" >
+                    <h1  >${titulo}</h1>
+                    <br/>
+                    <b class="mx-auto">Author:</b> ${autor}
+                    <br/>
+                    <br/>
+                    <b class="mx-auto">Max points:</b> ${puntaje_total}
+                    <br/>
+                    </div>
+
                 <div id="user-form">
                     <form style="width: 75vh;" class="mx-auto" > 
                         <h3>Ingresa tus datos personales</h3>
@@ -289,11 +291,26 @@ const generateHtml=(quizData,content)=>{
             <!--  -->
                 <div id="quiz-content" class="mx-auto" hidden>
                 ${htmlInteractiveContent}
-                <button class="btn btn-outline-primary d-block mb-5" id="evaluation-button" onclick='setPointsPerQuestion()'>Enviar</button>
-                 </div>
+                
+                <div id="evaluation-button"><button class="ms-3 btn btn-primary d-block mx-auto" >Enviar</button></div>
+        
+        
+              <div class="card border-success mb-3" style="max-width: 18rem;" id="results-card" hidden>
+                <div class="card-header">Results</div>
+                <div class="card-body text-success">
+                    <p class="card-text" id="final-score"></p>
+                </div>
+              </div>
+
             <!--  -->
 
             </main>
+            <script>
+            const domain="${xapi_domain}";
+            const endpoint="${lrs}";
+            const LRSuserName="${lrs_username}";
+            const LRSPassword="${lrs_pass}";
+            </script>
             <script src="./scripts/tincan-min.js"></script>
             <script src="./scripts/xApiInteractions.js"></script>
             <script src="./scripts/main.js"></script>
@@ -320,7 +337,6 @@ const generateHtml=(quizData,content)=>{
 </html>`;
 }
 
-//toDo que las uri coincidan
 const createHtmlFile=(htmlContent)=>{
     const url="http://localhost:3001/editor";
     const jsonBody={
@@ -334,7 +350,7 @@ const createHtmlFile=(htmlContent)=>{
 
 
 const downloadXAPIZip=()=>{
-    const url="http://localhost:3001/generate-xapi"; ///
+    const url="http://localhost:3001/generate-xapi"; 
     const currentDate = (new Date()).toLocaleString();
     const fileName=`xapi_${currentDate}`;
     getBlobFile(url,fileName)

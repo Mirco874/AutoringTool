@@ -215,8 +215,17 @@ const generateHtml=(quizData,content)=>{
                                     <b>Max points:</b> ${puntaje_total}
                                 <br/>
                             ${htmlInteractiveContent}
-                            <button class="btn btn-outline-primary d-block mb-5" id="evaluation-button" onclick='setPointsPerQuestion()'>Enviar</button>
-                        </main>
+
+                            <div id="evaluation-button"><button class="ms-3 btn btn-primary d-block mx-auto" >Enviar</button></div>
+        
+                            <div class="card border-success mb-3" style="max-width: 18rem;" id="results-card" hidden>
+                              <div class="card-header">Results</div>
+                              <div class="card-body text-success">
+                                  <p class="card-text" id="final-score"></p>
+                              </div>
+                            </div>
+                        
+                            </main>
                         <script src="scormfunctions.js" type="text/javascript"></script>
                         <script>
                             ${script}
@@ -292,7 +301,19 @@ export const generateSCORM=( quizData,elements)=>{
     const htmlContent=generateHtml(quizData,elements);
     const manifestContent=generateManifest(quizData);
     console.log(htmlContent);
-    createHtmlFile(htmlContent);
-    createManifestFile(manifestContent)
-    downloadScormZip();
+
+    const writeScormFiles=new Promise((resolve,reject)=>{
+        try {
+            createHtmlFile(htmlContent);
+            createManifestFile(manifestContent)
+            resolve("done")
+        } catch (error) {
+            reject("fail")
+        }
+    })
+    writeScormFiles.then((message)=>{
+        downloadScormZip();
+    })
+    
+    
 } 
